@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "../../component/SearchBar/SearchBar";
-import Axios from "axios";
-import api from "../../services/api"
+import RepoList from "../../component/RepoList/RepoList"
+import api from "../../services/api";
 
 class Home extends Component {
   state = {
@@ -12,37 +12,41 @@ class Home extends Component {
   };
 
   changeUser = (user) => {
-      this.setState({user})
-  }
-
-
-
-
-
-  searchUser =  ()=>{
-    const{user}=this.state; 
-
-    api.get(`https://api.github.com/users/${user}`)
-    .then((data)=>{
-        console.log('retornou do github',data);
-
-    })
-    .catch(error=> console.log(error))
-    
+    this.setState({ user });
   };
 
+  searchUser = async () => {
+    const { user } = this.state;
+
+    try {
+      const { data: repos } = await api.get(
+        `https://api.github.com/users/${user}/repos`
+      );
+
+      console.log(repos)
+
+      this.setState({ repos });
+    } catch (error) {
+      this.setState({
+        error: "usuario nao encontrado",
+        repos:[]
+      });
+    }
+  };
 
   render() {
-    const { user, repos, error, loading } = this.state;
+    const { user, repos, error } = this.state;
     return (
       <div>
         <SearchBar
           changeUser={this.changeUser}
           user={user}
           error={error}
-          loading={loading}
+          
           buttonAction={this.searchUser}
         />
+
+        <RepoList repos={repos}/>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import "./searchBar.css"
 
-const SearchBar =({user,loading,error,buttonAction,changeUser})=>(
+const SearchBar =({user,error,buttonAction,changeUser})=>(
   <div className="searchBarContainer">
     <input
     type="text"
