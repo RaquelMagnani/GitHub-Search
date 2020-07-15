@@ -18,10 +18,14 @@ class Home extends Component {
   searchUser = async () => {
     const { user } = this.state;
 
+    
+
     try {
+      
       const { data: repos } = await api.get(
         `https://api.github.com/users/${user}/repos`
       );
+
 
       console.log(repos)
 
@@ -38,6 +42,7 @@ class Home extends Component {
     const { user, repos, error } = this.state;
     return (
       <div>
+        <h1>GitHub Search</h1>
         <SearchBar
           changeUser={this.changeUser}
           user={user}
