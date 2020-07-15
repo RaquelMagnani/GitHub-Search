@@ -6,9 +6,10 @@ import api from "../../services/api";
 class Home extends Component {
   state = {
     user: "",
+    users:[],
     repos: [],
-    error: "",
-    loading: false,
+    error: ""
+    
   };
 
   changeUser = (user) => {
@@ -25,11 +26,14 @@ class Home extends Component {
       const { data: repos } = await api.get(
         `https://api.github.com/users/${user}/repos`
       );
-
+      const { data: users } = await api.get(
+        `https://api.github.com/users/${user}`
+      );
+      console.log(users)
 
       console.log(repos)
 
-      this.setState({ repos });
+      this.setState({ repos,users });
     } catch (error) {
       this.setState({
         error: "usuario nao encontrado",
@@ -39,7 +43,8 @@ class Home extends Component {
   };
 
   render() {
-    const { user, repos, error } = this.state;
+    const { users,user, repos, error } = this.state;
+    
     return (
       <div>
         <h1>GitHub Search</h1>
@@ -48,10 +53,11 @@ class Home extends Component {
           user={user}
           error={error}
           
+          
           buttonAction={this.searchUser}
         />
-
-        <RepoList repos={repos}/>
+        
+        <RepoList repos={repos} users={users} />
       </div>
     );
   }
